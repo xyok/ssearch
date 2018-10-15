@@ -11,7 +11,8 @@ setup(
         license='MIT',
         author='xyok',
         author_email='xy___ok@163.com',
-        description='sougo translate cmd tool',
+        description='sougo translate cli tool',
+        keywords=['cli', 'translate', "chinese"],
         long_description=long_description,
         long_description_content_type="text/markdown",
         install_requires=[
@@ -22,4 +23,10 @@ setup(
                 's = ssearch.ssearch:main'
             ]
         },
+        classifiers=[
+            "Programming Language :: Python :: 3",
+            "Programming Language :: Python :: 2.7",
+            "License :: OSI Approved :: MIT License",
+            "Operating System :: OS Independent",
+        ],
 )
