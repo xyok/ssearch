@@ -3,9 +3,13 @@ from setuptools import setup
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+about = {}
+with open('ssearch/__init__.py') as f:
+    exec(f.read(), about)
+
 setup(
         name='ssearch',
-        version='0.0.1',
+        version=about['__version__'],
         packages=['ssearch'],
         url='https://github.com/xyok/ssearch.git',
         license='MIT',

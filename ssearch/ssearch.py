@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Created on 2018/9/28
-import json
 import sys
-
+from hashlib import md5
 import requests
 import uuid
 import argparse
 import re
+
+
+class Language:
+    ch = u'中文'
 
 
 class Bcolors:
@@ -21,9 +24,9 @@ class Bcolors:
     UNDERLINE = '\033[4m'
 
 
-def fm(s: str):
+def fm(s):
     """
-    消除富文本内容
+    clear rich text
     :param s:
     :return:
     """
@@ -31,11 +34,14 @@ def fm(s: str):
 
 
 def search(text):
-    print('{}正在使用搜狗翻译查询 [{}] ...{}'.format(Bcolors.HEADER, text, Bcolors.ENDC))
+    print(u'{}using sougou translate search [{}] ...{}'.format(Bcolors.HEADER, text, Bcolors.ENDC))
 
     url = 'https://fanyi.sogou.com/reventondc/translate'
-    param = {'from'           : 'auto',
-             'to'             : 'zh-CHS',
+    _from = 'auto'
+    to = 'zh-CHS'
+    s = md5('{}{}{}{}'.format(_from, to, text, 'front_9ee4f0a1102eee31d09b55e4d66931fd').encode()).hexdigest()
+    param = {'from'           : _from,
+             'to'             : to,
              'client'         : 'pc',
              'fr'             : 'browser_pc',
              'text'           : text,
@@ -44,7 +50,8 @@ def search(text):
              'needQc'         : 1,
              'uuid'           : uuid.uuid4(),
              'oxford'         : 'on',
-             'isReturnSugg'   : 'off'}
+             'isReturnSugg'   : 'off',
+             's'              : s}
 
     resp = requests.post(url=url, data=param).json()
 
@@ -54,8 +61,8 @@ def search(text):
     sys.stdout.write("\033[K")  # clear line
 
     print(Bcolors.OKGREEN)
-    print('{0: >10} : {1}'.format('text', resp.get('translate', {}).get('text')))
-    print('{0: >10} : {1}'.format('dit', resp.get('translate', {}).get('dit')))
+    print(u'{0: >10} : {1}'.format('text', resp.get('translate', {}).get('text')))
+    print(u'{0: >10} : {1}'.format('dit', resp.get('translate', {}).get('dit')))
 
     # print(json.dumps(resp))
     d = resp.get('dictionary')
@@ -64,12 +71,12 @@ def search(text):
             phonetic = item.get('phonetic', [])
             if isinstance(phonetic, list):
                 for p in phonetic:
-                    print('{0: >10} : {1}'.format(p['type'], p['text']))
+                    print(u'{0: >10} : {1}'.format(p['type'], p['text']))
 
             for u in item.get('usual', []):
-                print('{0: >10} : {1}'.format(u['pos'], fm(' '.join(u['values']))))
+                print(u'{0: >10} : {1}'.format(u['pos'], fm(' '.join(u['values']))))
 
-    if detect == '中文' and d:
+    if detect == Language.ch and d:
         for item in d['content']:
             cat = item.get('category', [])
             for c in cat:
@@ -82,7 +89,7 @@ def search(text):
 def main():
     parser = argparse.ArgumentParser(description='search tool')
 
-    parser.add_argument('text', nargs='?', help='搜索内容')
+    parser.add_argument('text', nargs='?', help='search content')
     parser.add_argument('-e', nargs='+', help='search engineer')
 
     args = parser.parse_args()
@@ -91,10 +98,6 @@ def main():
         search(args.text)
     else:
         parser.print_help()
-
-
-def test():
-    search('notorio')
 
 
 if __name__ == '__main__':

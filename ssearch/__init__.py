@@ -3,3 +3,4 @@
 # Created on 2018/9/30
 
 name = "ssearch"
+__version__ = '0.0.3'
