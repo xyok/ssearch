@@ -15,6 +15,8 @@ class SearchTest(unittest.TestCase):
             search('notorio')
             mocked_print.assert_any_call('      text : notorio')
 
+    def test_print(selfs):
+        search('apple')
 
 if __name__ == '__main__':
     unittest.main()

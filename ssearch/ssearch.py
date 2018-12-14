@@ -39,7 +39,7 @@ def search(text):
     url = 'https://fanyi.sogou.com/reventondc/translate'
     _from = 'auto'
     to = 'zh-CHS'
-    s = md5('{}{}{}{}'.format(_from, to, text, 'front_9ee4f0a1102eee31d09b55e4d66931fd').encode()).hexdigest()
+    s = md5('{}{}{}{}'.format(_from, to, text, '41ee21a5ab5a13f72687a270816d1bfd').encode()).hexdigest()
     param = {'from'           : _from,
              'to'             : to,
              'client'         : 'pc',
@@ -48,11 +48,10 @@ def search(text):
              'useDetect'      : 'on',
              'useDetectResult': 'on',
              'needQc'         : 1,
-             'uuid'           : uuid.uuid4(),
+             'uuid'           : str(uuid.uuid4()),
              'oxford'         : 'on',
-             'isReturnSugg'   : 'off',
+             'isReturnSugg'   : 'on',
              's'              : s}
-
     resp = requests.post(url=url, data=param).json()
 
     detect = resp.get('detect', {}).get('language')
