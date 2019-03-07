@@ -39,7 +39,7 @@ def search(text):
     url = 'https://fanyi.sogou.com/reventondc/translate'
     _from = 'auto'
     to = 'zh-CHS'
-    s = md5('{}{}{}{}'.format(_from, to, text, '41ee21a5ab5a13f72687a270816d1bfd').encode()).hexdigest()
+    s = md5('{}{}{}{}'.format(_from, to, text, 'b33bf8c58706155663d1ad5dba4192dc').encode()).hexdigest()
     param = {'from'           : _from,
              'to'             : to,
              'client'         : 'pc',
